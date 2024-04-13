@@ -179,7 +179,24 @@
             margin-left: 60px;
         }
 
+        .personas {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
 
+        .personas img {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .persona {
+            opacity: 0.5;
+        }
+        .selected-persona {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -187,7 +204,7 @@
 <div id="selector">
     <ul>
         <li>
-            <label class="custom-checkbox" onclick="toggleDataset(this, 'zelen')">
+            <label class="custom-checkbox" id="checkbox-zelen" onclick="toggleDataset(this, 'zelen')">
                 <span class="legend" id="legend-zelen"></span>
                 <span class="checkbox checked"></span>
                 <span class="category">Zeleň</span>
@@ -196,7 +213,7 @@
         </li>
         <li>
 
-            <label class="custom-checkbox" onclick="toggleDataset(this, 'hriste')">
+            <label class="custom-checkbox" id="checkbox-hriste" onclick="toggleDataset(this, 'hriste')">
                 <span class="legend" id="legend-hriste"></span>
                 <span class="checkbox checked"></span>
                 <span class="category">Hřiště</span>
@@ -205,7 +222,7 @@
 
         </li>
         <li>
-            <label class="custom-checkbox" onclick="toggleDataset(this, 'skoly')">
+            <label class="custom-checkbox" id="checkbox-skoly" onclick="toggleDataset(this, 'skoly')">
                 <span class="legend" id="legend-skoly"></span>
 
                 <span class="checkbox checked"></span>
@@ -214,7 +231,7 @@
             </label>
         </li>
         <li>
-            <label class="custom-checkbox" onclick="toggleDataset(this, 'skolky')">
+            <label class="custom-checkbox" id="checkbox-skolky" onclick="toggleDataset(this, 'skolky')">
                 <span class="legend" id="legend-skolky"></span>
 
                 <span class="checkbox checked"></span>
@@ -223,7 +240,7 @@
             </label>
         </li>
         <li>
-            <label class="custom-checkbox" onclick="toggleDataset(this, 'sportoviste')">
+            <label class="custom-checkbox" id="checkbox-sportoviste" onclick="toggleDataset(this, 'sportoviste')">
                 <span class="legend" id="legend-sportoviste"></span>
 
                 <span class="checkbox checked"></span>
@@ -232,7 +249,7 @@
             </label>
         </li>
         <li>
-            <label class="custom-checkbox" onclick="toggleDataset(this, 'lekarny')">
+            <label class="custom-checkbox" id="checkbox-lekarny" onclick="toggleDataset(this, 'lekarny')">
                 <span class="legend" id="legend-lekarny"></span>
 
                 <span class="checkbox checked"></span>
@@ -241,7 +258,7 @@
             </label>
         </li>
         <li>
-            <label class="custom-checkbox" onclick="toggleDataset(this, 'air')">
+            <label class="custom-checkbox" id="checkbox-air" onclick="toggleDataset(this, 'air')">
                 <span class="legend" id="legend-air"></span>
 
                 <span class="checkbox checked"></span>
@@ -250,9 +267,14 @@
             </label>
         </li>
     </ul>
-<!--    <img src="sum.png" alt="" style="display: inline-block">-->
+    <!--    <img src="sum.png" alt="" style="display: inline-block">-->
     <span class="category" style="display: inline-block; width: 80px">Celkem</span>
     <div id="index-total"></div>
+    <div class="personas">
+        <img class="persona" src="young.png" alt="" onclick="selectPersona(this, 'young')">
+        <img class="persona" src="fam.png" alt="" onclick="selectPersona(this, 'fam')">
+        <img class="persona" src="old.png" alt="" onclick="selectPersona(this, 'old')">
+    </div>
 </div>
 
 </body>

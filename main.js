@@ -544,3 +544,70 @@ function toggleDataset(element, dataset) {
     checkboxSpan.classList.toggle('checked');
     element.classList.toggle('disabled-checkbox');
 }
+
+function hide(element, dataset) {
+    if (dataset !== 'air') {
+        const clickedLayer = dataset + 'Layer';
+
+        // Toggle layer visibility by changing the layout object's visibility property.
+        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+    }
+
+    const checkboxSpan = element.querySelector('.checkbox');
+    element.classList = 'custom-checkbox disabled-checkbox';
+    checkboxSpan.classList = 'checkbox';
+}
+
+function show(element, dataset) {
+    if (dataset !== 'air') {
+        const clickedLayer = dataset + 'Layer';
+
+
+        map.setLayoutProperty(
+            clickedLayer,
+            'visibility',
+            'visible'
+        );
+    }
+
+    const checkboxSpan = element.querySelector('.checkbox');
+    checkboxSpan.classList = 'checkbox checked';
+    element.classList = 'custom-checkbox';
+}
+
+function selectPersona(element, persona) {
+    if(element.classList.contains('selected-persona')){
+
+        element.classList.remove('selected-persona');
+        for (const [key, item] of Object.entries(config)) {
+            let element = document.querySelector('#checkbox-' + key);
+            show(element, key);
+        }
+        return;
+    }
+
+    const personas = document.querySelectorAll('.persona');
+    personas.forEach((persona) => {
+        persona.classList.remove('selected-persona');
+    });
+
+    element.classList.add('selected-persona');
+
+    let localConfig = {
+        'old': ['air', 'zelen', 'lekarny'],
+        'fam': ['air', 'hriste', 'skoly', 'skolky', 'zelen'],
+        'young': ['sportoviste', 'zelen'],
+    }
+
+    for (const [key, item] of Object.entries(config)) {
+        let element = document.querySelector('#checkbox-' + key);
+
+        hide(element, key);
+    }
+    for (const [key, item] of Object.entries(localConfig[persona])) {
+        let element = document.querySelector('#checkbox-' + item);
+        show(element, item);
+    }
+
+
+}
