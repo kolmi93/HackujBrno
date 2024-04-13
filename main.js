@@ -49,6 +49,7 @@ function initMap() {
         // Copy coordinates array.
         let lat = e.lngLat.lat;
         let lng = e.lngLat.lng;
+        let indexes = [];
 
 
         for (const [key, item] of Object.entries(globalData)) {
@@ -65,7 +66,16 @@ function initMap() {
             }
             checkboxSpan.classList.add('bg-color-' + index);
             checkboxSpan.textContent = index;
+            indexes.push(index);
         }
+
+        let totalIndex = Math.ceil(calculateAverage(indexes));
+
+        // const totalIndexElement = document.querySelector('#index-total');
+        // totalIndexElement.classList = 'bg bg-default';
+        // if (totalIndex > 10) {
+        //     totalIndex = 10;
+        // }
 
         if(marker !== undefined) {
             marker.remove();
@@ -81,6 +91,7 @@ function initMap() {
     });
 
 }
+const calculateAverage = numbers => numbers.reduce((sum, value) => sum + value, 0) / numbers.length || 0;
 
 
 // Async function to load CSV data
