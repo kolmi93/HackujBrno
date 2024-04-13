@@ -29,19 +29,130 @@
             width: 300px;
             height: 300px;
         }
+
+        /* styles.css */
+        .custom-checkbox {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .custom-checkbox .checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border: 2px solid #555;
+            border-radius: 0px;
+            position: relative;
+        }
+
+        .custom-checkbox .checkbox::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 6px;
+            width: 4px;
+            height: 10px;
+            border: solid #bd7b7b;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+            display: none;
+        }
+
+        .custom-checkbox .checkbox.checked::after {
+            display: block;
+        }
+
+        #selector li {
+            list-style-type: none;
+            margin-bottom: 10px;
+        }
+
+        /*.bg-color-1 { background-color: #00ff00; } !* Pure green *!*/
+        /*.bg-color-2 { background-color: #2dff00; }*/
+        /*.bg-color-3 { background-color: #5aff00; }*/
+        /*.bg-color-4 { background-color: #87ff00; }*/
+        /*.bg-color-5 { background-color: #b4ff00; }*/
+        /*.bg-color-6 { background-color: #e1ff00; }*/
+        /*.bg-color-7 { background-color: #ffde00; }*/
+        /*.bg-color-8 { background-color: #ffb100; }*/
+        /*.bg-color-9 { background-color: #ff8400; }*/
+        /*.bg-color-10 { background-color: #ff5700; }*/
+        /*.bg-color-11 { background-color: #ff0000; } !* Pure red *!*/
+
+
+        /*.bg-color-1 { background-color: #00ff00; } !* Pure green *!*/
+        /*.bg-color-2 { background-color: #24e20c; }*/
+        /*.bg-color-3 { background-color: #48c519; }*/
+        /*.bg-color-4 { background-color: #6da827; }*/
+        /*.bg-color-5 { background-color: #918a34; }*/
+        /*.bg-color-6 { background-color: #b46c42; }*/
+        /*.bg-color-7 { background-color: #d74e50; }*/
+        /*.bg-color-8 { background-color: #fb305e; }*/
+        /*.bg-color-9 { background-color: #ff126b; }*/
+        /*.bg-color-10 { background-color: #ff0479; }*/
+        /*.bg-color-11 { background-color: #ff0000; } !* Pure red *!*/
+
+        /* Update class names according to actual color output */
+        .bg-color-1 { background-color: #00ff00; } /* Green */
+        .bg-color-2 { background-color: #83da26; } /* Green transitioning to orange */
+        .bg-color-3 { background-color: #99b44d; }
+        .bg-color-4 { background-color: #e68f74; }
+        .bg-color-5 { background-color: #ff6900; } /* Approximate orange */
+        .bg-color-6 { background-color: #ff5b00; }
+        .bg-color-7 { background-color: #d74e50; }
+        .bg-color-8 { background-color: #fb305e; }
+        .bg-color-9 { background-color: #ff126b; }
+        .bg-color-10 { background-color: #ff0000; } /* Pure red */
+
+        .bg {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+
     </style>
 </head>
 <body>
 <div id="map"></div>
 <div id="selector">
-<ul>
-    <li>
-        <a href="#" onclick="toggleDataset('zelen')">Zelen</a>
-        <a href="#" onclick="toggleDataset('hriste')">Hriste</a>
-        <a href="#" onclick="toggleDataset('skoly')">Skoly</a>
-        <a href="#" onclick="toggleDataset('skolky')">Skolky</a>
-    </li>
-</ul>
+    <ul>
+        <li>
+            <label class="custom-checkbox" onclick="toggleDataset(this, 'zelen')">
+                <span class="checkbox checked"></span>
+                Zeleň
+                <span id="index-zelen" class="bg bg-default"></span>
+            </label>
+        </li>
+        <li>
+
+            <label class="custom-checkbox" onclick="toggleDataset(this, 'hriste')">
+                <span class="checkbox checked"></span>
+                Hřiště
+                <span id="index-hriste" class="bg bg-default"></span>
+            </label>
+
+        </li>
+        <li>
+
+            <label class="custom-checkbox" onclick="toggleDataset(this, 'skoly')">
+                <span class="checkbox checked"></span>
+                Školy
+                <span id="index-skoly" class="bg bg-default"></span>
+
+            </label>
+        </li>
+        <li>
+
+            <label class="custom-checkbox" onclick="toggleDataset(this, 'skolky')">
+                <span class="checkbox checked"></span>
+                Školky
+                <span id="index-skolky" class="bg bg-default"></span>
+            </label>
+        </li>
+    </ul>
 </div>
 
 </body>

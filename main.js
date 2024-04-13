@@ -1,9 +1,3 @@
-let dataSkoly = undefined;
-let dataSkolyParsed = undefined;
-let dataHriste = undefined;
-let dataHristeParsed = undefined;
-
-let dataSkolyMinimas = [];
 let globalData = {};
 let map = undefined;
 
@@ -18,10 +12,7 @@ function initMap() {
     });
 
     map.on('load', () => {
-
-        // globalData.forEach((item) => {
         for (const [key, item] of Object.entries(globalData)) {
-            console.log(item);
             map.addSource(item['name'], {
                 type: 'geojson',
                 data: {
@@ -49,50 +40,29 @@ function initMap() {
                 }
             });
         }
-        // )
-        //     ;
 
-
-        // map.addSource('hriste', {
-        //     type: 'geojson',
-        //     data: {
-        //         'type': 'FeatureCollection',
-        //         'features': dataHristeParsed
-        //     }
-        // });
-
-        // Apply 'within' expressionwerwer to points
-        // Routes within Colorado have 'circle-color': '#f55442'
-        // Fallback values (routes not within Colorado) have 'circle-color': '#484848'
-
-
-        // map.addLayer({
-        //     'id': 'hristeLayer',
-        //     'type': 'circle',
-        //     'source': 'hriste',
-        //     'layout': {},
-        //     'paint': {
-        //         'circle-radius': 8,
-        //         'circle-color': '#bf0053',
-        //         'circle-blur': 0.1,
-        //         'circle-opacity': 0.7,
-        //         'circle-stroke-width': 2,
-        //         'circle-stroke-color': '#ffffff',
-        //         'circle-stroke-opacity': 0.9
-        //     }
-        // });
     });
     map.on('click', (e) => {
         // Copy coordinates array.
         let lat = e.lngLat.lat;
         let lng = e.lngLat.lng;
-        console.log(e);
-        // let myDistance = calculateClosest(lat, lng, dataSkolyParsed);
-        // let maxDistance = Math.max(...dataSkolyMinimas);
-        // let index = Math.ceil((10 * myDistance) / maxDistance);
-        //
-        // console.log("index : " + index);
 
+
+        for (const [key, item] of Object.entries(globalData)) {
+            let name = item['name'];
+            let myDistance = calculateClosest(lat, lng, globalData[name]['features']);
+            let maxDistance = Math.max(...globalData[name]['minimas']);
+            let index = Math.ceil((10 * myDistance) / maxDistance);
+            // console.log("index : " + index + "  : " + name);
+
+            const checkboxSpan = document.querySelector('#index-' + name);
+            checkboxSpan.classList = 'bg bg-default';
+            if (index > 10) {
+                index = 10;
+            }
+            checkboxSpan.classList.add('bg-color-' + index);
+            checkboxSpan.textContent = index;
+        }
     });
 }
 
@@ -126,24 +96,6 @@ async function loadCSVData(fileName) {
     }
 }
 
-// // Call the function
-// let x = loadCSVData('skoly.csv').then(data => {
-//     // This will log the data returned from the function, if needed
-//     dataSkoly = data;
-//     dataSkolyParsed = csvToJson(dataSkoly);
-//
-//     loadCSVData('hriste.csv').then(data => {
-//         dataHriste = data;
-//         initMap();
-//
-//         dataSkolyParsed.forEach((item) => {
-//             let localLat = item.geometry.coordinates[1];
-//             let localLng = item.geometry.coordinates[0];
-//             let val = calculateClosest(localLat, localLng, dataSkolyParsed);
-//             if(val !== Infinity) dataSkolyMinimas.push(val);
-//         });
-//     });
-// });
 
 let config = {
     'skoly': {
@@ -176,24 +128,36 @@ function csvToJson(csvString, fileName) {
     // Split the CSV into lines
     let lines = csvString.split('\n');
 
+    lines = lines.filter(line => line.length > 0);
+    lines = lines.filter(line => line.length > 0);
     // Map each line to a JSON object
-    let jsonResult = lines.map(line => {
+    let filteredData = lines.filter(line => {
         // Split each line by comma to get individual values
         let [name, X, Y] = line.split(',');
 
-        // Return the desired JSON structure
+        let parsedX = parseFloat(X);
+        let parsedY = parseFloat(Y);
+        return parsedX > 16 && parsedX < 16.8 && parsedY > 49 && parsedY < 49.5;
+
+    });
+
+    let jsonResult = filteredData.map(line => {
+        let [name, X, Y] = line.split(',');
+
+        let parsedX = parseFloat(X);
+        let parsedY = parseFloat(Y);
+
         return {
             'type': 'Feature',
             'properties': {
                 'name': fileName,
             },
             'geometry': {
-                'coordinates': [parseFloat(X), parseFloat(Y)],
+                'coordinates': [parsedX, parsedY],
                 'type': 'Point'
             }
-        };
+        }
     });
-
     return jsonResult;
 }
 
@@ -208,7 +172,6 @@ function calculateClosest(lat, lng, data) {
         if (lat === localLat && lng === localLng) return;
 
         let distance = measure(lat, lng, localLat, localLng);
-        // console.log("distance : " + distance);
         if (distance < closest) {
             closest = distance;
             closestName = item.name;
@@ -219,8 +182,6 @@ function calculateClosest(lat, lng, data) {
         }
     });
 
-    // let index = Math.ceil((10 * closest) / farest);
-    // console.log(index);
     return closest;
 }
 
@@ -237,10 +198,8 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
 }
 
 
-function toggleDataset(dataset) {
+function toggleDataset(element, dataset) {
     const clickedLayer = dataset + 'Layer';
-    // e.preventDefault();
-    // e.stopPropagation();
 
     const visibility = map.getLayoutProperty(
         clickedLayer,
@@ -250,13 +209,14 @@ function toggleDataset(dataset) {
     // Toggle layer visibility by changing the layout object's visibility property.
     if (visibility === 'visible') {
         map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-        this.className = '';
     } else {
-        this.className = 'active';
         map.setLayoutProperty(
             clickedLayer,
             'visibility',
             'visible'
         );
     }
+
+    const checkboxSpan = element.querySelector('.checkbox');
+    checkboxSpan.classList.toggle('checked');
 }
