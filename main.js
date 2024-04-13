@@ -153,6 +153,12 @@ let config = {
     },
     'skolky': {
         'color': '#ffd100'
+    },
+    'sportoviste': {
+        'color': '#b700ff'
+    },
+    'lekarny': {
+        'color': '#9f9f9f'
     }
 }
 
@@ -161,6 +167,8 @@ async function loadData() {
     await loadCSVData('hriste');
     await loadCSVData('zelen');
     await loadCSVData('skolky');
+    await loadCSVData('sportoviste');
+    await loadCSVData('lekarny');
 }
 
 loadData().then(() => {
