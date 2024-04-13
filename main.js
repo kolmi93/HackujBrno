@@ -1,6 +1,7 @@
 let globalData = {};
 let map = undefined;
 let marker = undefined;
+let airData = undefined;
 
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoiamlya2FzZW1tbGVyIiwiYSI6ImNsdXh2d3kzdDBzb2Eyam55MGx3OGlzeDkifQ.1xn7r6c7OnYB-meA5S3S5w';
@@ -142,7 +143,6 @@ function initMap() {
         // });
 
 
-
         map.addSource('maine', {
             'type': 'geojson',
             'data': {
@@ -272,6 +272,8 @@ function initMap() {
             indexes.push(index);
         }
 
+        countAirIndex(lat, lng);
+
         let totalIndex = Math.round(calculateAverage(indexes));
 
         const totalIndexElement = document.querySelector('#index-total');
@@ -297,6 +299,28 @@ function initMap() {
             .setLngLat([lng, lat])
             .addTo(map);
     });
+
+}
+
+function countAirIndex(lat, lng) {
+    let minValue = 0.36;
+    let maxValue = 0.797;
+    let indexes = [];
+    let myValue = calculateClosestAir(lat, lng, airData['features']);
+    let index = Math.round((10 * (myValue - minValue)) / (maxValue - minValue));
+    const checkboxSpan = document.querySelector('#index-air');
+    checkboxSpan.classList = 'bg bg-default';
+    if (index > 10) {
+        index = 10;
+    }
+
+    if (index < 1) {
+        index = 1;
+    }
+    checkboxSpan.classList.add('bg-color-' + index);
+    checkboxSpan.textContent = index;
+    indexes.push(index);
+    return Math.round(calculateAverage(indexes));
 
 }
 
@@ -333,6 +357,37 @@ async function loadCSVData(fileName) {
 }
 
 
+// Async function to load CSV data
+async function loadAirData() {
+    let fileName = 'kvalita';
+    try {
+        // Await the fetch call to resolve and get the response
+        const response = await fetch('kvalita.csv');
+
+        // Check if the fetch was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Await the text data from the response
+        const data = await response.text();
+        let parsedData = csvToJson(data, fileName);
+        let minimas = [];
+        parsedData.forEach((item) => {
+            let localLat = item.geometry.coordinates[1];
+            let localLng = item.geometry.coordinates[0];
+            let val = calculateClosest(localLat, localLng, parsedData);
+            if (val !== Infinity) minimas.push(val);
+        });
+
+        airData = {'features': parsedData};
+        return data; // Returning the data if needed elsewhere
+    } catch (error) {
+        console.error('Error loading the CSV file:', error);
+    }
+}
+
+
 let config = {
     'skoly': {
         'color': '#007cbf'
@@ -361,6 +416,7 @@ async function loadData() {
     await loadCSVData('skolky');
     await loadCSVData('sportoviste');
     await loadCSVData('lekarny');
+    await loadAirData();
 }
 
 loadData().then(() => {
@@ -386,7 +442,7 @@ function csvToJson(csvString, fileName) {
     });
 
     let jsonResult = filteredData.map(line => {
-        let [name, X, Y] = line.split(',');
+        let [name, X, Y, value] = line.split(',');
 
         let parsedX = parseFloat(X);
         let parsedY = parseFloat(Y);
@@ -395,6 +451,7 @@ function csvToJson(csvString, fileName) {
             'type': 'Feature',
             'properties': {
                 'name': fileName,
+                'value': value,
             },
             'geometry': {
                 'coordinates': [parsedX, parsedY],
@@ -429,6 +486,26 @@ function calculateClosest(lat, lng, data) {
     return closest;
 }
 
+function calculateClosestAir(lat, lng, data) {
+    let closest = Infinity;
+    let closestName = '';
+    let closestValue = 0;
+    data.forEach((item) => {
+        let localLat = item.geometry.coordinates[1];
+        let localLng = item.geometry.coordinates[0];
+        if (lat === localLat && lng === localLng) return;
+
+        let distance = measure(lat, lng, localLat, localLng);
+        if (distance < closest) {
+            closest = distance;
+            closestName = item.name;
+            closestValue = parseFloat(item.properties.value);
+        }
+    });
+
+    return closestValue;
+}
+
 function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement function
     var R = 6378.137; // Radius of earth in KM
     var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
@@ -443,22 +520,24 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
 
 
 function toggleDataset(element, dataset) {
-    const clickedLayer = dataset + 'Layer';
+    if (dataset !== 'air') {
+        const clickedLayer = dataset + 'Layer';
 
-    const visibility = map.getLayoutProperty(
-        clickedLayer,
-        'visibility'
-    );
-
-    // Toggle layer visibility by changing the layout object's visibility property.
-    if (visibility === 'visible') {
-        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-    } else {
-        map.setLayoutProperty(
+        const visibility = map.getLayoutProperty(
             clickedLayer,
-            'visibility',
-            'visible'
+            'visibility'
         );
+
+        // Toggle layer visibility by changing the layout object's visibility property.
+        if (visibility === 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+        } else {
+            map.setLayoutProperty(
+                clickedLayer,
+                'visibility',
+                'visible'
+            );
+        }
     }
 
     const checkboxSpan = element.querySelector('.checkbox');
