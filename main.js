@@ -406,6 +406,12 @@ let config = {
     },
     'lekarny': {
         'color': '#9f9f9f'
+    },
+    'lekari': {
+        'color': '#4fc3d7'
+    },
+    'pediatri': {
+        'color': '#143e5b'
     }
 }
 
@@ -416,6 +422,8 @@ async function loadData() {
     await loadCSVData('skolky');
     await loadCSVData('sportoviste');
     await loadCSVData('lekarny');
+    await loadCSVData('lekari');
+    await loadCSVData('pediatri');
     await loadAirData();
 }
 
@@ -594,8 +602,8 @@ function selectPersona(element, persona) {
     element.classList.add('selected-persona');
 
     let localConfig = {
-        'old': ['air', 'zelen', 'lekarny'],
-        'fam': ['air', 'hriste', 'skoly', 'skolky', 'zelen'],
+        'old': ['air', 'zelen', 'lekarny', 'lekari'],
+        'fam': ['air', 'hriste', 'skoly', 'skolky', 'zelen', 'pediatri'],
         'young': ['sportoviste', 'zelen'],
     }
 
