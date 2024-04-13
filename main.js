@@ -149,7 +149,7 @@ let config = {
     'skoly': {
         'color': '#007cbf'
     },
-    'playground': {
+    'hriste': {
         'color': '#bd411b'
     },
     'zelen': {
@@ -159,7 +159,7 @@ let config = {
 
 async function loadData() {
     await loadCSVData('skoly');
-    await loadCSVData('playground');
+    await loadCSVData('hriste');
     await loadCSVData('zelen');
 }
 
