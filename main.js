@@ -1,5 +1,9 @@
 let dataSkoly = undefined;
+let dataSkolyParsed = undefined;
 let dataHriste = undefined;
+let dataHristeParsed = undefined;
+
+let dataSkolyMinimas = [];
 
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoiamlya2FzZW1tbGVyIiwiYSI6ImNsdXh2d3kzdDBzb2Eyam55MGx3OGlzeDkifQ.1xn7r6c7OnYB-meA5S3S5w';
@@ -17,16 +21,18 @@ function initMap() {
             type: 'geojson',
             data: {
                 'type': 'FeatureCollection',
-                'features': csvToJson(dataSkoly)
+                'features': dataSkolyParsed
             }
         });
-        map.addSource('hriste', {
-            type: 'geojson',
-            data: {
-                'type': 'FeatureCollection',
-                'features': csvToJson(dataHriste)
-            }
-        });
+
+        // dataHristeParsed = csvToJson(dataHriste);
+        // map.addSource('hriste', {
+        //     type: 'geojson',
+        //     data: {
+        //         'type': 'FeatureCollection',
+        //         'features': dataHristeParsed
+        //     }
+        // });
 
         // Apply 'within' expressionwerwer to points
         // Routes within Colorado have 'circle-color': '#f55442'
@@ -47,21 +53,33 @@ function initMap() {
             }
         });
 
-        map.addLayer({
-            'id': 'hristeLayer',
-            'type': 'circle',
-            'source': 'hriste',
-            'layout': {},
-            'paint': {
-                'circle-radius': 8,
-                'circle-color': '#bf0053',
-                'circle-blur': 0.1,
-                'circle-opacity': 0.7,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#ffffff',
-                'circle-stroke-opacity': 0.9
-            }
-        });
+        // map.addLayer({
+        //     'id': 'hristeLayer',
+        //     'type': 'circle',
+        //     'source': 'hriste',
+        //     'layout': {},
+        //     'paint': {
+        //         'circle-radius': 8,
+        //         'circle-color': '#bf0053',
+        //         'circle-blur': 0.1,
+        //         'circle-opacity': 0.7,
+        //         'circle-stroke-width': 2,
+        //         'circle-stroke-color': '#ffffff',
+        //         'circle-stroke-opacity': 0.9
+        //     }
+        // });
+    });
+    map.on('click', (e) => {
+        // Copy coordinates array.
+        let lat = e.lngLat.lat;
+        let lng = e.lngLat.lng;
+
+        let myDistance = calculateClosest(lat, lng, dataSkolyParsed);
+        let maxDistance = Math.max(...dataSkolyMinimas);
+        let index = Math.ceil((10 * myDistance) / maxDistance);
+
+        console.log("index : " + index);
+
     });
 }
 
@@ -92,9 +110,18 @@ async function loadCSVData(fileName) {
 loadCSVData('skoly.csv').then(data => {
     // This will log the data returned from the function, if needed
     dataSkoly = data;
+    dataSkolyParsed = csvToJson(dataSkoly);
+
     loadCSVData('hriste.csv').then(data => {
         dataHriste = data;
         initMap();
+
+        dataSkolyParsed.forEach((item) => {
+            let localLat = item.geometry.coordinates[1];
+            let localLng = item.geometry.coordinates[0];
+            let val = calculateClosest(localLat, localLng, dataSkolyParsed);
+            if(val !== Infinity) dataSkolyMinimas.push(val);
+        });
     });
 });
 
@@ -120,4 +147,43 @@ function csvToJson(csvString) {
     });
 
     return jsonResult;
+}
+
+function calculateClosest(lat, lng, data) {
+    let closest = Infinity;
+    let farest = 0;
+    let closestName = '';
+
+    data.forEach((item) => {
+        let localLat = item.geometry.coordinates[1];
+        let localLng = item.geometry.coordinates[0];
+        if(lat === localLat && lng === localLng) return;
+
+        let distance = measure(lat, lng, localLat, localLng);
+        // console.log("distance : " + distance);
+        if (distance < closest) {
+            closest = distance;
+            closestName = item.name;
+        }
+        if (distance > farest) {
+            farest = distance;
+            closestName = item.name;
+        }
+    });
+
+    // let index = Math.ceil((10 * closest) / farest);
+    // console.log(index);
+    return closest;
+}
+
+function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d * 1000; // meters
 }
