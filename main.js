@@ -5,10 +5,11 @@ let dataHristeParsed = undefined;
 
 let dataSkolyMinimas = [];
 let globalData = {};
+let map = undefined;
 
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoiamlya2FzZW1tbGVyIiwiYSI6ImNsdXh2d3kzdDBzb2Eyam55MGx3OGlzeDkifQ.1xn7r6c7OnYB-meA5S3S5w';
-    const map = new mapboxgl.Map({
+    map = new mapboxgl.Map({
         container: 'map', // container ID
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
         style: 'mapbox://styles/mapbox/light-v11', // style URL
@@ -33,7 +34,10 @@ function initMap() {
                 'id': item['name'] + 'Layer',
                 'type': 'circle',
                 'source': item['name'],
-                'layout': {},
+                'layout': {
+                    // Make the layer visible by default.
+                    'visibility': 'visible'
+                },
                 'paint': {
                     'circle-radius': 8,
                     'circle-color': config[item['name']]['color'],
@@ -82,12 +86,12 @@ function initMap() {
         // Copy coordinates array.
         let lat = e.lngLat.lat;
         let lng = e.lngLat.lng;
-
-        let myDistance = calculateClosest(lat, lng, dataSkolyParsed);
-        let maxDistance = Math.max(...dataSkolyMinimas);
-        let index = Math.ceil((10 * myDistance) / maxDistance);
-
-        console.log("index : " + index);
+        console.log(e);
+        // let myDistance = calculateClosest(lat, lng, dataSkolyParsed);
+        // let maxDistance = Math.max(...dataSkolyMinimas);
+        // let index = Math.ceil((10 * myDistance) / maxDistance);
+        //
+        // console.log("index : " + index);
 
     });
 }
@@ -106,7 +110,7 @@ async function loadCSVData(fileName) {
 
         // Await the text data from the response
         const data = await response.text();
-        let parsedData = csvToJson(data);
+        let parsedData = csvToJson(data, fileName);
         let minimas = [];
         parsedData.forEach((item) => {
             let localLat = item.geometry.coordinates[1];
@@ -164,7 +168,7 @@ loadData().then(() => {
 });
 
 // Function to convert CSV to JSON
-function csvToJson(csvString) {
+function csvToJson(csvString, fileName) {
     // Split the CSV into lines
     let lines = csvString.split('\n');
 
@@ -176,7 +180,9 @@ function csvToJson(csvString) {
         // Return the desired JSON structure
         return {
             'type': 'Feature',
-            'properties': {},
+            'properties': {
+                'name': fileName,
+            },
             'geometry': {
                 'coordinates': [parseFloat(X), parseFloat(Y)],
                 'type': 'Point'
@@ -224,4 +230,29 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c;
     return d * 1000; // meters
+}
+
+
+function toggleDataset(dataset) {
+    const clickedLayer = dataset + 'Layer';
+    // e.preventDefault();
+    // e.stopPropagation();
+
+    const visibility = map.getLayoutProperty(
+        clickedLayer,
+        'visibility'
+    );
+
+    // Toggle layer visibility by changing the layout object's visibility property.
+    if (visibility === 'visible') {
+        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+        this.className = '';
+    } else {
+        this.className = 'active';
+        map.setLayoutProperty(
+            clickedLayer,
+            'visibility',
+            'visible'
+        );
+    }
 }
