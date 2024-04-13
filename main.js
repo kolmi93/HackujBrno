@@ -8,7 +8,8 @@ function initMap() {
     map = new mapboxgl.Map({
         container: 'map', // container ID
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/mapbox/light-v11', // style URL
+        style:
+            'mapbox://styles/mapbox/light-v11', // style URL
         center: [16.608904709836153, 49.19476456348063], // starting position [lng, lat]
         zoom: 13 // starting zoom
     });
@@ -304,7 +305,7 @@ function initMap() {
 
 function countAirIndex(lat, lng) {
     let minValue = 0.36;
-    let maxValue = 0.797;
+    let maxValue = 0.8;
     let indexes = [];
     let myValue = calculateClosestAir(lat, lng, airData['features']);
     let index = Math.round((10 * (myValue - minValue)) / (maxValue - minValue));
