@@ -44,7 +44,206 @@ function initMap() {
             });
         }
 
+        //
+        // map.addSource('maine', {
+        //     'type': 'geojson',
+        //     'data': {
+        //         'type': 'Feature',
+        //         'geometry': {
+        //             'type': 'Polygon',
+        //             // These coordinates outline Maine.
+        //             'coordinates': [
+        //                 [
+        //                     16.593948,
+        //                     49.2080651
+        //                 ],
+        //                 [
+        //                     16.5944512,
+        //                     49.2072391
+        //                 ],
+        //                 [
+        //                     16.5946283,
+        //                     49.2069453
+        //                 ],
+        //                 [
+        //                     16.594888,
+        //                     49.2065225
+        //                 ],
+        //                 [
+        //                     16.5948146,
+        //                     49.2064988
+        //                 ],
+        //                 [
+        //                     16.5936548,
+        //                     49.206134
+        //                 ],
+        //                 [
+        //                     16.5936274,
+        //                     49.206161
+        //                 ],
+        //                 [
+        //                     16.5935062,
+        //                     49.2062799
+        //                 ],
+        //                 [
+        //                     16.5935026,
+        //                     49.2063134
+        //                 ],
+        //                 [
+        //                     16.5929531,
+        //                     49.2067989
+        //                 ],
+        //                 [
+        //                     16.5930155,
+        //                     49.206938
+        //                 ],
+        //                 [
+        //                     16.5927077,
+        //                     49.2073789
+        //                 ],
+        //                 [
+        //                     16.5925628,
+        //                     49.2076649
+        //                 ],
+        //                 [
+        //                     16.5925459,
+        //                     49.2076987
+        //                 ],
+        //                 [
+        //                     16.593948,
+        //                     49.2080651
+        //                 ]
+        //             ]
+        //         }
+        //     }
+        // });
+
+        // // Add a new layer to visualize the polygon.
+        // map.addLayer({
+        //     'id': 'maine',
+        //     'type': 'fill',
+        //     'source': 'maine', // reference the data source
+        //     'layout': {},
+        //     'paint': {
+        //         'fill-color': '#ff0000', // blue color fill
+        //         'fill-opacity': 1
+        //     }
+        // });
+        // // Add a black outline around the polygon.
+        // map.addLayer({
+        //     'id': 'outline',
+        //     'type': 'line',
+        //     'source': 'maine',
+        //     'layout': {},
+        //     'paint': {
+        //         'line-color': '#000',
+        //         'line-width': 3
+        //     }
+        // });
+
+
+
+        map.addSource('maine', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    // These coordinates outline Maine.
+                    'coordinates': [
+                        [
+                            [
+                                16.593948,
+                                49.2080651
+                            ],
+                            [
+                                16.5944512,
+                                49.2072391
+                            ],
+                            [
+                                16.5946283,
+                                49.2069453
+                            ],
+                            [
+                                16.594888,
+                                49.2065225
+                            ],
+                            [
+                                16.5948146,
+                                49.2064988
+                            ],
+                            [
+                                16.5936548,
+                                49.206134
+                            ],
+                            [
+                                16.5936274,
+                                49.206161
+                            ],
+                            [
+                                16.5935062,
+                                49.2062799
+                            ],
+                            [
+                                16.5935026,
+                                49.2063134
+                            ],
+                            [
+                                16.5929531,
+                                49.2067989
+                            ],
+                            [
+                                16.5930155,
+                                49.206938
+                            ],
+                            [
+                                16.5927077,
+                                49.2073789
+                            ],
+                            [
+                                16.5925628,
+                                49.2076649
+                            ],
+                            [
+                                16.5925459,
+                                49.2076987
+                            ],
+                            [
+                                16.593948,
+                                49.2080651
+                            ]
+                        ]
+                    ]
+                }
+            }
+        });
+
+        // Add a new layer to visualize the polygon.
+        map.addLayer({
+            'id': 'maine',
+            'type': 'fill',
+            'source': 'maine', // reference the data source
+            'layout': {},
+            'paint': {
+                'fill-color': '#6e9367', // blue color fill
+                'fill-opacity': 0.5
+            }
+        });
+        // Add a black outline around the polygon.
+        map.addLayer({
+            'id': 'outline',
+            'type': 'line',
+            'source': 'maine',
+            'layout': {},
+            'paint': {
+                'line-color': '#53c73d',
+                'line-width': 1
+            }
+        });
+
+
     });
+
     map.on('click', (e) => {
         // Copy coordinates array.
         let lat = e.lngLat.lat;
@@ -77,7 +276,7 @@ function initMap() {
         //     totalIndex = 10;
         // }
 
-        if(marker !== undefined) {
+        if (marker !== undefined) {
             marker.remove();
         }
 
@@ -86,11 +285,12 @@ function initMap() {
 
         // make a marker for each feature and add it to the map
         marker = new mapboxgl.Marker(el)
-            .setLngLat( [lng, lat])
+            .setLngLat([lng, lat])
             .addTo(map);
     });
 
 }
+
 const calculateAverage = numbers => numbers.reduce((sum, value) => sum + value, 0) / numbers.length || 0;
 
 
