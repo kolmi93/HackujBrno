@@ -255,7 +255,7 @@ function initMap() {
             let name = item['name'];
             let myDistance = calculateClosest(lat, lng, globalData[name]['features']);
             let maxDistance = Math.max(...globalData[name]['minimas']);
-            let index = Math.ceil((10 * myDistance) / maxDistance);
+            let index = Math.round((10 * myDistance) / maxDistance);
             // console.log("index : " + index + "  : " + name);
 
             const checkboxSpan = document.querySelector('#index-' + name);
@@ -263,18 +263,27 @@ function initMap() {
             if (index > 10) {
                 index = 10;
             }
+
+            if (index < 1) {
+                index = 1;
+            }
             checkboxSpan.classList.add('bg-color-' + index);
             checkboxSpan.textContent = index;
             indexes.push(index);
         }
 
-        let totalIndex = Math.ceil(calculateAverage(indexes));
+        let totalIndex = Math.round(calculateAverage(indexes));
 
-        // const totalIndexElement = document.querySelector('#index-total');
-        // totalIndexElement.classList = 'bg bg-default';
-        // if (totalIndex > 10) {
-        //     totalIndex = 10;
-        // }
+        const totalIndexElement = document.querySelector('#index-total');
+        if (totalIndex > 10) {
+            totalIndex = 10;
+        }
+        totalIndexElement.classList = 'bg bg-default';
+        totalIndexElement.classList.add('bg-color-' + totalIndex);
+
+
+        totalIndexElement.textContent = totalIndex;
+
 
         if (marker !== undefined) {
             marker.remove();
