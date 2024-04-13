@@ -1,5 +1,6 @@
 let globalData = {};
 let map = undefined;
+let marker = undefined;
 
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoiamlya2FzZW1tbGVyIiwiYSI6ImNsdXh2d3kzdDBzb2Eyam55MGx3OGlzeDkifQ.1xn7r6c7OnYB-meA5S3S5w';
@@ -63,7 +64,50 @@ function initMap() {
             checkboxSpan.classList.add('bg-color-' + index);
             checkboxSpan.textContent = index;
         }
+
+        if(marker !== undefined) {
+            marker.remove();
+        }
+        // if (map.getLayer('marker')) {
+        //     map.removeLayer('marker');
+        //     map.removeSource('marker');
+        // }
+        //
+        // // Define the marker's properties
+        // map.addSource('marker', {
+        //     type: 'geojson',
+        //     data: {
+        //         type: 'FeatureCollection',
+        //         features: [{
+        //             type: 'Feature',
+        //             geometry: {
+        //                 type: 'Point',
+        //                 coordinates: [lng, lat]
+        //             }
+        //         }]
+        //     }
+        // });
+        //
+        // // Add the marker to the map
+        // map.addLayer({
+        //     id: 'marker',
+        //     type: 'circle',
+        //     source: 'marker',
+        //     paint: {
+        //         'circle-radius': 10,
+        //         'circle-color': '#007cbf'
+        //     }
+        // });
+
+        const el = document.createElement('div');
+        el.className = 'marker';
+
+        // make a marker for each feature and add it to the map
+        marker = new mapboxgl.Marker(el)
+            .setLngLat( [lng, lat])
+            .addTo(map);
     });
+
 }
 
 
@@ -219,4 +263,5 @@ function toggleDataset(element, dataset) {
 
     const checkboxSpan = element.querySelector('.checkbox');
     checkboxSpan.classList.toggle('checked');
+    element.classList.toggle('disabled-checkbox');
 }

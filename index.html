@@ -6,10 +6,19 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
     <style>
         body {
+            box-sizing: border-box;
+
             margin: 0;
             padding: 0;
+            font-family: "Roboto", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
 
         #map {
@@ -23,9 +32,9 @@
             position: absolute;
             top: 0;
             right: 0;
-            margin: 10px;
+            margin: 0;
             padding: 10px;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.79);
             width: 300px;
             height: 300px;
         }
@@ -35,6 +44,7 @@
             display: inline-flex;
             align-items: center;
             cursor: pointer;
+            height: 40px;
         }
 
         .custom-checkbox .checkbox {
@@ -94,24 +104,86 @@
         /*.bg-color-11 { background-color: #ff0000; } !* Pure red *!*/
 
         /* Update class names according to actual color output */
-        .bg-color-1 { background-color: #00ff00; } /* Green */
-        .bg-color-2 { background-color: #83da26; } /* Green transitioning to orange */
-        .bg-color-3 { background-color: #99b44d; }
-        .bg-color-4 { background-color: #e68f74; }
-        .bg-color-5 { background-color: #ff6900; } /* Approximate orange */
-        .bg-color-6 { background-color: #ff5b00; }
-        .bg-color-7 { background-color: #d74e50; }
-        .bg-color-8 { background-color: #fb305e; }
-        .bg-color-9 { background-color: #ff126b; }
-        .bg-color-10 { background-color: #ff0000; } /* Pure red */
-
-        .bg {
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            margin-left: 10px;
+        .bg-color-1 {
+            background-color: #00ff00;
         }
 
+        /* Green */
+        .bg-color-2 {
+            background-color: #83da26;
+        }
+
+        /* Green transitioning to orange */
+        .bg-color-3 {
+            background-color: #99b44d;
+        }
+
+        .bg-color-4 {
+            background-color: #e68f74;
+        }
+
+        .bg-color-5 {
+            background-color: #ff6900;
+        }
+
+        /* Approximate orange */
+        .bg-color-6 {
+            background-color: #ff5b00;
+        }
+
+        .bg-color-7 {
+            background-color: #d74e50;
+        }
+
+        .bg-color-8 {
+            background-color: #fb305e;
+        }
+
+        .bg-color-9 {
+            background-color: #ff126b;
+        }
+
+        .bg-color-10 {
+            background-color: #ff0000;
+        }
+
+        /* Pure red */
+
+        .bg {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            margin-left: 10px;
+            text-align: center;
+            box-sizing: border-box;
+            padding-top: 9px;
+            font-size: 20px;
+            color: #323232;
+
+        }
+
+        .category {
+            display: block;
+            width: 60px;
+        }
+
+        .disabled-checkbox {
+            opacity: 0.5;
+        }
+
+        .disabled-checkbox .bg {
+            display: none;
+        }
+
+        .marker {
+            background-image: url('./img.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -20px;
+        }
 
     </style>
 </head>
@@ -122,7 +194,7 @@
         <li>
             <label class="custom-checkbox" onclick="toggleDataset(this, 'zelen')">
                 <span class="checkbox checked"></span>
-                Zeleň
+                <span class="category">Zeleň</span>
                 <span id="index-zelen" class="bg bg-default"></span>
             </label>
         </li>
@@ -130,7 +202,7 @@
 
             <label class="custom-checkbox" onclick="toggleDataset(this, 'hriste')">
                 <span class="checkbox checked"></span>
-                Hřiště
+                <span class="category">Hřiště</span>
                 <span id="index-hriste" class="bg bg-default"></span>
             </label>
 
@@ -139,7 +211,9 @@
 
             <label class="custom-checkbox" onclick="toggleDataset(this, 'skoly')">
                 <span class="checkbox checked"></span>
-                Školy
+
+                <span class="category">Školy</span>
+
                 <span id="index-skoly" class="bg bg-default"></span>
 
             </label>
@@ -148,7 +222,7 @@
 
             <label class="custom-checkbox" onclick="toggleDataset(this, 'skolky')">
                 <span class="checkbox checked"></span>
-                Školky
+                <span class="category">Školky</span>
                 <span id="index-skolky" class="bg bg-default"></span>
             </label>
         </li>
