@@ -22,6 +22,8 @@ function initMap() {
                 }
             });
 
+            document.getElementById('legend-' + item['name']).style = 'background-color: ' + config[item['name']]['color'];
+
             map.addLayer({
                 'id': item['name'] + 'Layer',
                 'type': 'circle',
@@ -31,7 +33,7 @@ function initMap() {
                     'visibility': 'visible'
                 },
                 'paint': {
-                    'circle-radius': 8,
+                    'circle-radius': 5,
                     'circle-color': config[item['name']]['color'],
                     'circle-blur': 0.1,
                     'circle-opacity': 0.7,
@@ -68,36 +70,6 @@ function initMap() {
         if(marker !== undefined) {
             marker.remove();
         }
-        // if (map.getLayer('marker')) {
-        //     map.removeLayer('marker');
-        //     map.removeSource('marker');
-        // }
-        //
-        // // Define the marker's properties
-        // map.addSource('marker', {
-        //     type: 'geojson',
-        //     data: {
-        //         type: 'FeatureCollection',
-        //         features: [{
-        //             type: 'Feature',
-        //             geometry: {
-        //                 type: 'Point',
-        //                 coordinates: [lng, lat]
-        //             }
-        //         }]
-        //     }
-        // });
-        //
-        // // Add the marker to the map
-        // map.addLayer({
-        //     id: 'marker',
-        //     type: 'circle',
-        //     source: 'marker',
-        //     paint: {
-        //         'circle-radius': 10,
-        //         'circle-color': '#007cbf'
-        //     }
-        // });
 
         const el = document.createElement('div');
         el.className = 'marker';
