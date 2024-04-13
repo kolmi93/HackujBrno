@@ -4,6 +4,7 @@ let dataHriste = undefined;
 let dataHristeParsed = undefined;
 
 let dataSkolyMinimas = [];
+let globalData = {};
 
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoiamlya2FzZW1tbGVyIiwiYSI6ImNsdXh2d3kzdDBzb2Eyam55MGx3OGlzeDkifQ.1xn7r6c7OnYB-meA5S3S5w';
@@ -17,15 +18,37 @@ function initMap() {
 
     map.on('load', () => {
 
-        map.addSource('skoly', {
-            type: 'geojson',
-            data: {
-                'type': 'FeatureCollection',
-                'features': dataSkolyParsed
-            }
-        });
+        // globalData.forEach((item) => {
+        for (const [key, item] of Object.entries(globalData)) {
+            console.log(item);
+            map.addSource(item['name'], {
+                type: 'geojson',
+                data: {
+                    'type': 'FeatureCollection',
+                    'features': item['features']
+                }
+            });
 
-        // dataHristeParsed = csvToJson(dataHriste);
+            map.addLayer({
+                'id': item['name'] + 'Layer',
+                'type': 'circle',
+                'source': item['name'],
+                'layout': {},
+                'paint': {
+                    'circle-radius': 8,
+                    'circle-color': config[item['name']]['color'],
+                    'circle-blur': 0.1,
+                    'circle-opacity': 0.7,
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ffffff',
+                    'circle-stroke-opacity': 0.9
+                }
+            });
+        }
+        // )
+        //     ;
+
+
         // map.addSource('hriste', {
         //     type: 'geojson',
         //     data: {
@@ -37,21 +60,7 @@ function initMap() {
         // Apply 'within' expressionwerwer to points
         // Routes within Colorado have 'circle-color': '#f55442'
         // Fallback values (routes not within Colorado) have 'circle-color': '#484848'
-        map.addLayer({
-            'id': 'skolyLayer',
-            'type': 'circle',
-            'source': 'skoly',
-            'layout': {},
-            'paint': {
-                'circle-radius': 8,
-                'circle-color': '#007cbf',
-                'circle-blur': 0.1,
-                'circle-opacity': 0.7,
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#ffffff',
-                'circle-stroke-opacity': 0.9
-            }
-        });
+
 
         // map.addLayer({
         //     'id': 'hristeLayer',
@@ -88,7 +97,7 @@ function initMap() {
 async function loadCSVData(fileName) {
     try {
         // Await the fetch call to resolve and get the response
-        const response = await fetch(fileName);
+        const response = await fetch(fileName + '.csv');
 
         // Check if the fetch was successful
         if (!response.ok) {
@@ -97,32 +106,57 @@ async function loadCSVData(fileName) {
 
         // Await the text data from the response
         const data = await response.text();
+        let parsedData = csvToJson(data);
+        let minimas = [];
+        parsedData.forEach((item) => {
+            let localLat = item.geometry.coordinates[1];
+            let localLng = item.geometry.coordinates[0];
+            let val = calculateClosest(localLat, localLng, parsedData);
+            if (val !== Infinity) minimas.push(val);
+        });
 
-        // Now you can use the CSV data
-//        console.log(data);
+        globalData[fileName] = {'features': parsedData, 'minimas': minimas, 'name': fileName};
         return data; // Returning the data if needed elsewhere
     } catch (error) {
         console.error('Error loading the CSV file:', error);
     }
 }
 
-// Call the function
-loadCSVData('skoly.csv').then(data => {
-    // This will log the data returned from the function, if needed
-    dataSkoly = data;
-    dataSkolyParsed = csvToJson(dataSkoly);
+// // Call the function
+// let x = loadCSVData('skoly.csv').then(data => {
+//     // This will log the data returned from the function, if needed
+//     dataSkoly = data;
+//     dataSkolyParsed = csvToJson(dataSkoly);
+//
+//     loadCSVData('hriste.csv').then(data => {
+//         dataHriste = data;
+//         initMap();
+//
+//         dataSkolyParsed.forEach((item) => {
+//             let localLat = item.geometry.coordinates[1];
+//             let localLng = item.geometry.coordinates[0];
+//             let val = calculateClosest(localLat, localLng, dataSkolyParsed);
+//             if(val !== Infinity) dataSkolyMinimas.push(val);
+//         });
+//     });
+// });
 
-    loadCSVData('hriste.csv').then(data => {
-        dataHriste = data;
-        initMap();
+let config = {
+    'skoly': {
+        'color': '#007cbf'
+    },
+    'hriste': {
+        'color': '#bf0033'
+    }
+}
 
-        dataSkolyParsed.forEach((item) => {
-            let localLat = item.geometry.coordinates[1];
-            let localLng = item.geometry.coordinates[0];
-            let val = calculateClosest(localLat, localLng, dataSkolyParsed);
-            if(val !== Infinity) dataSkolyMinimas.push(val);
-        });
-    });
+async function loadData() {
+    await loadCSVData('skoly');
+    await loadCSVData('hriste');
+}
+
+loadData().then(() => {
+    initMap();
 });
 
 // Function to convert CSV to JSON
@@ -157,7 +191,7 @@ function calculateClosest(lat, lng, data) {
     data.forEach((item) => {
         let localLat = item.geometry.coordinates[1];
         let localLng = item.geometry.coordinates[0];
-        if(lat === localLat && lng === localLng) return;
+        if (lat === localLat && lng === localLng) return;
 
         let distance = measure(lat, lng, localLat, localLng);
         // console.log("distance : " + distance);
