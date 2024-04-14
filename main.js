@@ -413,6 +413,9 @@ let config = {
     },
     'pediatri': {
         'color': '#143e5b'
+    },
+    'mhd': {
+        'color': '#273034'
     }
 }
 
@@ -425,6 +428,7 @@ async function loadData() {
     await loadCSVData('lekarny');
     await loadCSVData('lekari');
     await loadCSVData('pediatri');
+    await loadCSVData('mhd');
     await loadAirData();
 }
 
