@@ -416,6 +416,9 @@ let config = {
     },
     'mhd': {
         'color': '#273034'
+    },
+    'shop': {
+        'color': '#53c73d'
     }
 }
 
@@ -429,6 +432,7 @@ async function loadData() {
     await loadCSVData('lekari');
     await loadCSVData('pediatri');
     await loadCSVData('mhd');
+    await loadCSVData('shop');
     await loadAirData();
 }
 
@@ -607,9 +611,9 @@ function selectPersona(element, persona) {
     element.classList.add('selected-persona');
 
     let localConfig = {
-        'old': ['air', 'zelen', 'lekarny', 'lekari'],
+        'old': ['air', 'zelen', 'lekarny', 'lekari', 'shop'],
         'fam': ['air', 'hriste', 'skoly', 'skolky', 'zelen', 'pediatri'],
-        'young': ['sportoviste', 'zelen'],
+        'young': ['sportoviste', 'zelen', 'shop'],
     }
 
     for (const [key, item] of Object.entries(config)) {
