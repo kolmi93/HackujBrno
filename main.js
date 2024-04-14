@@ -63,7 +63,6 @@ function initMap() {
             let myDistance = calculateClosest(lat, lng, globalData[name]['features']);
             let maxDistance = Math.max(...globalData[name]['minimas']);
             let index = Math.round((5 * myDistance) / maxDistance);
-            // console.log("index : " + index + "  : " + name);
 
             const checkboxSpan = document.querySelector('#index-' + name);
             checkboxSpan.classList = 'bg bg-default';
@@ -180,8 +179,6 @@ async function loadPolygon() {
         let polygony = JSON.parse(data)
 
         for (const [key, item] of Object.entries(polygony)) {
-            console.log('tada');
-            console.log(item);
 
             map.addSource('park' + item.park_id, {
                 'type': 'geojson',
