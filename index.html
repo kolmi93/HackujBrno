@@ -237,17 +237,22 @@
 
         #overlay-close{
             display: block;
-            width: 50px;
-            height: 50px;
+            width:  100px;
+            height: 100px;
             position: absolute;
             left: 50px;
             right: 50px;
-            background: white;
+            background: #ffffff42;
             border-radius: 50%;
-            padding: 30px;
-            opacity: 50%;
+            /*padding: 30px;*/
             font-size: 30px;
             cursor: pointer;
+        }
+
+        .zavrit{
+            width: 90px;
+            filter: invert(1);
+            margin: 5px;
         }
 
         .prava{
@@ -429,7 +434,10 @@
             </span>
         </div>
     </div>
-    <div id="overlay-close">X</div>
+    <div id="overlay-close">
+        <img src="x.png" class="zavrit" alt="">
+
+    </div>
 </div>
 
 </body>
