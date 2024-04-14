@@ -26,223 +26,29 @@ function initMap() {
 
             document.getElementById('legend-' + item['name']).style = 'background-color: ' + config[item['name']]['color'];
 
-            map.addLayer({
-                'id': item['name'] + 'Layer',
-                'type': 'circle',
-                'source': item['name'],
-                'layout': {
-                    // Make the layer visible by default.
-                    'visibility': 'visible'
-                },
-                'paint': {
-                    'circle-radius': 5,
-                    'circle-color': config[item['name']]['color'],
-                    'circle-blur': 0.1,
-                    'circle-opacity': 0.7,
-                    'circle-stroke-width': 2,
-                    'circle-stroke-color': '#ffffff',
-                    'circle-stroke-opacity': 0.9
-                }
-            });
+            if (item['name'] !== 'zelen') {
+                map.addLayer({
+                    'id': item['name'] + 'Layer',
+                    'type': 'circle',
+                    'source': item['name'],
+                    'layout': {
+                        // Make the layer visible by default.
+                        'visibility': 'visible'
+                    },
+                    'paint': {
+                        'circle-radius': 5,
+                        'circle-color': config[item['name']]['color'],
+                        'circle-blur': 0.1,
+                        'circle-opacity': 0.7,
+                        'circle-stroke-width': 2,
+                        'circle-stroke-color': '#ffffff',
+                        'circle-stroke-opacity': 0.9
+                    }
+                });
+            }
         }
 
-        //
-        // map.addSource('maine', {
-        //     'type': 'geojson',
-        //     'data': {
-        //         'type': 'Feature',
-        //         'geometry': {
-        //             'type': 'Polygon',
-        //             // These coordinates outline Maine.
-        //             'coordinates': [
-        //                 [
-        //                     16.593948,
-        //                     49.2080651
-        //                 ],
-        //                 [
-        //                     16.5944512,
-        //                     49.2072391
-        //                 ],
-        //                 [
-        //                     16.5946283,
-        //                     49.2069453
-        //                 ],
-        //                 [
-        //                     16.594888,
-        //                     49.2065225
-        //                 ],
-        //                 [
-        //                     16.5948146,
-        //                     49.2064988
-        //                 ],
-        //                 [
-        //                     16.5936548,
-        //                     49.206134
-        //                 ],
-        //                 [
-        //                     16.5936274,
-        //                     49.206161
-        //                 ],
-        //                 [
-        //                     16.5935062,
-        //                     49.2062799
-        //                 ],
-        //                 [
-        //                     16.5935026,
-        //                     49.2063134
-        //                 ],
-        //                 [
-        //                     16.5929531,
-        //                     49.2067989
-        //                 ],
-        //                 [
-        //                     16.5930155,
-        //                     49.206938
-        //                 ],
-        //                 [
-        //                     16.5927077,
-        //                     49.2073789
-        //                 ],
-        //                 [
-        //                     16.5925628,
-        //                     49.2076649
-        //                 ],
-        //                 [
-        //                     16.5925459,
-        //                     49.2076987
-        //                 ],
-        //                 [
-        //                     16.593948,
-        //                     49.2080651
-        //                 ]
-        //             ]
-        //         }
-        //     }
-        // });
-
-        // // Add a new layer to visualize the polygon.
-        // map.addLayer({
-        //     'id': 'maine',
-        //     'type': 'fill',
-        //     'source': 'maine', // reference the data source
-        //     'layout': {},
-        //     'paint': {
-        //         'fill-color': '#ff0000', // blue color fill
-        //         'fill-opacity': 1
-        //     }
-        // });
-        // // Add a black outline around the polygon.
-        // map.addLayer({
-        //     'id': 'outline',
-        //     'type': 'line',
-        //     'source': 'maine',
-        //     'layout': {},
-        //     'paint': {
-        //         'line-color': '#000',
-        //         'line-width': 3
-        //     }
-        // });
-
-
-        map.addSource('maine', {
-            'type': 'geojson',
-            'data': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Polygon',
-                    // These coordinates outline Maine.
-                    'coordinates': [
-                        [
-                            [
-                                16.593948,
-                                49.2080651
-                            ],
-                            [
-                                16.5944512,
-                                49.2072391
-                            ],
-                            [
-                                16.5946283,
-                                49.2069453
-                            ],
-                            [
-                                16.594888,
-                                49.2065225
-                            ],
-                            [
-                                16.5948146,
-                                49.2064988
-                            ],
-                            [
-                                16.5936548,
-                                49.206134
-                            ],
-                            [
-                                16.5936274,
-                                49.206161
-                            ],
-                            [
-                                16.5935062,
-                                49.2062799
-                            ],
-                            [
-                                16.5935026,
-                                49.2063134
-                            ],
-                            [
-                                16.5929531,
-                                49.2067989
-                            ],
-                            [
-                                16.5930155,
-                                49.206938
-                            ],
-                            [
-                                16.5927077,
-                                49.2073789
-                            ],
-                            [
-                                16.5925628,
-                                49.2076649
-                            ],
-                            [
-                                16.5925459,
-                                49.2076987
-                            ],
-                            [
-                                16.593948,
-                                49.2080651
-                            ]
-                        ]
-                    ]
-                }
-            }
-        });
-
-        // Add a new layer to visualize the polygon.
-        map.addLayer({
-            'id': 'maine',
-            'type': 'fill',
-            'source': 'maine', // reference the data source
-            'layout': {},
-            'paint': {
-                'fill-color': '#6e9367', // blue color fill
-                'fill-opacity': 0.5
-            }
-        });
-        // Add a black outline around the polygon.
-        map.addLayer({
-            'id': 'outline',
-            'type': 'line',
-            'source': 'maine',
-            'layout': {},
-            'paint': {
-                'line-color': '#53c73d',
-                'line-width': 1
-            }
-        });
-
-
+        loadPolygon();
     });
 
     map.on('click', (e) => {
@@ -352,6 +158,55 @@ async function loadCSVData(fileName) {
 
         globalData[fileName] = {'features': parsedData, 'minimas': minimas, 'name': fileName};
         return data; // Returning the data if needed elsewhere
+    } catch (error) {
+        console.error('Error loading the CSV file:', error);
+    }
+}
+
+// Async function to load CSV data
+async function loadPolygon() {
+    try {
+        // Await the fetch call to resolve and get the response
+        const response = await fetch('parky.json');
+
+        // Check if the fetch was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Await the text data from the response
+        const data = await response.text();
+
+        let polygony = JSON.parse(data)
+
+        for (const [key, item] of Object.entries(polygony)) {
+            console.log('tada');
+            console.log(item);
+
+            map.addSource('park' + item.park_id, {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+                        // These coordinates outline Maine.
+                        'coordinates': item.geometry
+                    }
+                }
+            });
+
+            // Add a new layer to visualize the polygon.
+            map.addLayer({
+                'id': 'park' + item.park_id,
+                'type': 'fill',
+                'source': 'park' + item.park_id, // reference the data source
+                'layout': {},
+                'paint': {
+                    'fill-color': '#6e9367', // blue color fill
+                    'fill-opacity': 0.5
+                }
+            });
+        }
     } catch (error) {
         console.error('Error loading the CSV file:', error);
     }
@@ -593,7 +448,7 @@ function show(element, dataset) {
 }
 
 function selectPersona(element, persona) {
-    if(element.classList.contains('selected-persona')){
+    if (element.classList.contains('selected-persona')) {
 
         element.classList.remove('selected-persona');
         for (const [key, item] of Object.entries(config)) {
