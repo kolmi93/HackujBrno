@@ -194,11 +194,12 @@
         .persona {
             opacity: 0.5;
         }
+
         .selected-persona {
             opacity: 1;
         }
 
-        #overlay{
+        #overlay {
             display: block;
             position: absolute;
             top: 0;
@@ -209,16 +210,14 @@
             z-index: 1000;
         }
 
-        #overlay-title
-        {
+        #overlay-title {
             color: white;
             position: absolute;
             margin: 0 44%;
             font-size: 40px;
         }
 
-        .arrow-point
-        {
+        .arrow-point {
             position: absolute;
             left: 300px;
             color: orange;
@@ -226,8 +225,8 @@
             top: 200px;
 
         }
-        .arrow-select
-        {
+
+        .arrow-select {
             position: absolute;
             right: 250px;
             color: yellow;
@@ -235,9 +234,9 @@
             top: 100px;
         }
 
-        #overlay-close{
+        #overlay-close {
             display: block;
-            width:  100px;
+            width: 100px;
             height: 100px;
             position: absolute;
             left: 50px;
@@ -249,13 +248,13 @@
             cursor: pointer;
         }
 
-        .zavrit{
+        .zavrit {
             width: 90px;
             filter: invert(1);
             margin: 5px;
         }
 
-        .prava{
+        .prava {
             width: 90px;
             filter: invert(1);
             position: relative;
@@ -265,7 +264,8 @@
             animation: leftright 2s ease infinite;
 
         }
-        .dolu{
+
+        .dolu {
             width: 90px;
             filter: invert(1);
             position: relative;
@@ -287,6 +287,7 @@
                 transform: translateY(-10%);
             }
         }
+
         @keyframes leftright {
             0% {
                 transform: translateX(-10%);
@@ -301,7 +302,7 @@
             }
         }
 
-        .vysvetli{
+        .vysvetli {
             padding: 40px;
             font-size: 24px;
             line-height: 1.5;
@@ -311,6 +312,42 @@
             background: rgba(21, 17, 17, 0.72);
             color: white;
             width: 400px;
+        }
+
+        @media (max-width: 600px) {
+            .vysvetli {
+                width: 300px;
+
+            }
+
+            #overlay-close {
+                display: none;
+            }
+            #overlay-title {
+                margin: 10px;
+            }
+
+            .prava {
+                width: 30px;
+                top: 5px;
+            }
+            .arrow-select {
+                padding-left: 10px;
+            }
+
+            .arrow-point{
+                position: absolute;
+                left: 10px;
+                color: orange;
+                font-size: 30px;
+                top: 200px;
+                width: 202px;
+            }
+
+            .dolu{
+                width: 30px;
+                top: 5px;
+            }
         }
 
     </style>
@@ -441,7 +478,7 @@
             </span>
             <span class="arrow arrow-select">
                 2. Vyber co tě zajímá!
-                <img src="arrow.png"  class="prava" alt="">
+                <img src="arrow.png" class="prava" alt="">
 
             </span>
         </div>
@@ -452,7 +489,8 @@
     </div>
 
     <div class="vysvetli">
-        Vítejte v interaktivní mapě města Brna, která přehledně zobrazí úroveň občanské vybavenosti a kvality ovzduší v moravské metropoli.
+        Vítejte v interaktivní mapě města Brna, která přehledně zobrazí úroveň občanské vybavenosti a kvality ovzduší v
+        moravské metropoli.
     </div>
 </div>
 
