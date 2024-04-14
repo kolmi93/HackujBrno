@@ -3,6 +3,7 @@ let map = undefined;
 let marker = undefined;
 let airData = undefined;
 
+let selectedAreas = [];
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoiamlya2FzZW1tbGVyIiwiYSI6ImNsdXh2d3kzdDBzb2Eyam55MGx3OGlzeDkifQ.1xn7r6c7OnYB-meA5S3S5w';
     map = new mapboxgl.Map({
@@ -75,7 +76,10 @@ function initMap() {
             }
             checkboxSpan.classList.add('bg-color-' + index);
             checkboxSpan.textContent = index;
-            indexes.push(index);
+            if(selectedAreas.includes(name)){
+                indexes.push(index);
+
+            }
         }
 
         countAirIndex(lat, lng);
@@ -156,6 +160,8 @@ async function loadCSVData(fileName) {
         });
 
         globalData[fileName] = {'features': parsedData, 'minimas': minimas, 'name': fileName};
+        selectedAreas.push(fileName);
+
         return data; // Returning the data if needed elsewhere
     } catch (error) {
         console.error('Error loading the CSV file:', error);
@@ -387,6 +393,9 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
     return d * 1000; // meters
 }
 
+function removeValue(value){
+    selectedAreas = selectedAreas.filter(item => item !== value);
+}
 
 function toggleDataset(element, dataset) {
     if (dataset !== 'air') {
@@ -400,12 +409,16 @@ function toggleDataset(element, dataset) {
         // Toggle layer visibility by changing the layout object's visibility property.
         if (visibility === 'visible') {
             map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+
+            removeValue(dataset);
         } else {
             map.setLayoutProperty(
                 clickedLayer,
                 'visibility',
                 'visible'
             );
+
+            selectedAreas.push(dataset);
         }
     }
 
@@ -425,6 +438,10 @@ function hide(element, dataset) {
     const checkboxSpan = element.querySelector('.checkbox');
     element.classList = 'custom-checkbox disabled-checkbox';
     checkboxSpan.classList = 'checkbox';
+
+
+    removeValue(dataset);
+
 }
 
 function show(element, dataset) {
@@ -442,6 +459,7 @@ function show(element, dataset) {
     const checkboxSpan = element.querySelector('.checkbox');
     checkboxSpan.classList = 'checkbox checked';
     element.classList = 'custom-checkbox';
+    selectedAreas.push(dataset);
 }
 
 function selectPersona(element, persona) {
