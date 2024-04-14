@@ -256,13 +256,13 @@ function initMap() {
             let name = item['name'];
             let myDistance = calculateClosest(lat, lng, globalData[name]['features']);
             let maxDistance = Math.max(...globalData[name]['minimas']);
-            let index = Math.round((10 * myDistance) / maxDistance);
+            let index = Math.round((5 * myDistance) / maxDistance);
             // console.log("index : " + index + "  : " + name);
 
             const checkboxSpan = document.querySelector('#index-' + name);
             checkboxSpan.classList = 'bg bg-default';
-            if (index > 10) {
-                index = 10;
+            if (index > 5) {
+                index = 5;
             }
 
             if (index < 1) {
@@ -278,8 +278,8 @@ function initMap() {
         let totalIndex = Math.round(calculateAverage(indexes));
 
         const totalIndexElement = document.querySelector('#index-total');
-        if (totalIndex > 10) {
-            totalIndex = 10;
+        if (totalIndex > 5) {
+            totalIndex = 5;
         }
         totalIndexElement.classList = 'bg bg-default';
         totalIndexElement.classList.add('bg-color-' + totalIndex);
@@ -308,11 +308,11 @@ function countAirIndex(lat, lng) {
     let maxValue = 0.8;
     let indexes = [];
     let myValue = calculateClosestAir(lat, lng, airData['features']);
-    let index = Math.round((10 * (myValue - minValue)) / (maxValue - minValue));
+    let index = Math.round((5 * (myValue - minValue)) / (maxValue - minValue));
     const checkboxSpan = document.querySelector('#index-air');
     checkboxSpan.classList = 'bg bg-default';
-    if (index > 10) {
-        index = 10;
+    if (index > 5) {
+        index = 5;
     }
 
     if (index < 1) {
