@@ -197,6 +197,105 @@
         .selected-persona {
             opacity: 1;
         }
+
+        #overlay{
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        #overlay-title
+        {
+            color: white;
+            position: absolute;
+            margin: 0 44%;
+            font-size: 40px;
+        }
+
+        .arrow-point
+        {
+            position: absolute;
+            left: 300px;
+            color: orange;
+            font-size: 30px;
+            top: 200px;
+
+        }
+        .arrow-select
+        {
+            position: absolute;
+            right: 250px;
+            color: yellow;
+            font-size: 30px;
+            top: 100px;
+        }
+
+        #overlay-close{
+            display: block;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            left: 50px;
+            right: 50px;
+            background: white;
+            border-radius: 50%;
+            padding: 30px;
+            opacity: 50%;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .prava{
+            width: 90px;
+            filter: invert(1);
+            position: relative;
+            top: 34px;
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+            animation: leftright 2s ease infinite;
+
+        }
+        .dolu{
+            width: 90px;
+            filter: invert(1);
+            position: relative;
+            top: 35px;
+            transform: rotate(-135deg);
+            animation: updown 2s ease infinite;
+        }
+
+        @keyframes updown {
+            0% {
+                transform: translateY(-10%);
+            }
+
+            50% {
+                transform: translateY(10%);
+            }
+
+            100% {
+                transform: translateY(-10%);
+            }
+        }
+        @keyframes leftright {
+            0% {
+                transform: translateX(-10%);
+            }
+
+            50% {
+                transform: translateX(10%);
+            }
+
+            100% {
+                transform: translateX(-10%);
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -311,6 +410,26 @@
         <img class="persona" src="fam.png" alt="" onclick="selectPersona(this, 'fam')">
         <img class="persona" src="old.png" alt="" onclick="selectPersona(this, 'old')">
     </div>
+</div>
+
+<div id="overlay" onclick="closeOverlay()">
+    <div id="overlay-content">
+        <h2 id="overlay-title">Metropolis24</h2>
+        <p id="overlay-description"></p>
+        <div id="overlay-legend">
+            <span class="arrow arrow-point">
+                1. Klikni do mapy!
+                <img src="arrow-down.png" class="dolu" alt="">
+
+            </span>
+            <span class="arrow arrow-select">
+                2. Vyber co tě zajímá!
+                <img src="arrow.png"  class="prava" alt="">
+
+            </span>
+        </div>
+    </div>
+    <div id="overlay-close">X</div>
 </div>
 
 </body>

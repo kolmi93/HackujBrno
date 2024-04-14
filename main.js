@@ -480,3 +480,7 @@ function selectPersona(element, persona) {
 
 
 }
+
+closeOverlay = () => {
+    document.getElementById('overlay').style.display = 'none';
+}
